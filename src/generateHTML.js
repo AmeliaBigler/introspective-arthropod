@@ -1,4 +1,4 @@
-const generateHTML = ({}) => {
+const generateHTML = (data) => {
 
     return `
 <!DOCTYPE html>
@@ -10,8 +10,25 @@ const generateHTML = ({}) => {
     <title>Employees</title>
 </head>
 <body>
+    <div class='container'>
+        <div class='row'>
+            <div class='col'>
+                <h1>Employees</h1>
+            </div>
+        </div>
+    </div>
+
+    <div class='container'>
+        <div class='row'>
+            <div class='col'>
+                <h2>Team ${data.getRole()}: ${data.name}</h2>
+            </div>
+        </div>
+    </div>
     
 </body>
 </html>
 `
 }
+
+module.exports = generateHTML;
