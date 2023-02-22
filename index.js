@@ -3,6 +3,10 @@
 const fs = require("fs");
 const inquirer = require("inquirer");
 
+const Manager = require('./lib/manager');
+const Engineer = require('./lib/engineer');
+const Intern = require('./lib/intern');
+
 const generateHTML = require('./src/generateHTML');
 
 const managerQs = [
@@ -87,22 +91,21 @@ const addEmployeeQ = {
 
 // Define function to write HTML file
 function writeToFile(data) {
-    // const webpageHTML = generateHTML(data);
-    webpageHTML = JSON.stringify(data); //placeholder test. remove JSON after code generateHTML.js
+    const webpageHTML = generateHTML(data);
     fs.writeFile('employees.html', webpageHTML, (err) =>
         err ? console.log(err) : 
         console.log('Success!')
     );
 }
 
-// Define function to append HTML file
-function appendToFile(data) {
-    // const webpageHTML = generateHTML(data);
-    webpageHTML = JSON.stringify(data); //placeholder test. remove JSON after code generateHTML.js
-    fs.appendFile('employees.html', webpageHTML, (err) =>
-    err ? console.log(err) : 
-    console.log('Success!'));
-}
+// TODO: Define function to append HTML file
+// function appendToFile(data) {
+//     // const webpageHTML = generateHTML(data);
+//     webpageHTML = JSON.stringify(data); //placeholder test. remove JSON after code generateHTML.js
+//     fs.appendFile('employees.html', webpageHTML, (err) =>
+//     err ? console.log(err) : 
+//     console.log('Success!'));
+// }
 
 function addEmployeeFunction() {
     inquirer.prompt(addEmployeeQ)
@@ -110,13 +113,15 @@ function addEmployeeFunction() {
         if(data.addEmployee === 'Engineer') {
             inquirer.prompt(engineerQs)
             .then((data) => {
-                appendToFile(data);
+                const engineer = new Engineer(data.name, data.id, data.email, data.github);
+                appendToFile(engineer);
                 addEmployeeFunction();
             })
         } else if (data.addEmployee === 'Intern') {
             inquirer.prompt(internQs)
             .then((data) => {
-                appendToFile(data);
+                const intern = new Intern(data.name, data.id, data.email, data.school);
+                appendToFile(intern);
                 addEmployeeFunction();
             })
         } 
@@ -128,7 +133,8 @@ function addEmployeeFunction() {
 function init() {
     inquirer.prompt(managerQs)
     .then((data) => {
-        writeToFile(data)
+        const manager = new Manager(data.name, data.id, data.email, data.officeNumber);
+        writeToFile(manager);
         addEmployeeFunction();  
     })
 }
