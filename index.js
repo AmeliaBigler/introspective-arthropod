@@ -8,6 +8,7 @@ const Engineer = require('./lib/engineer');
 const Intern = require('./lib/intern');
 
 const generateHTML = require('./src/generateHTML');
+const appendHTML = require('./src/appendHTML');
 
 const managerQs = [
     {
@@ -92,33 +93,21 @@ const addEmployeeQ = {
 // Define function to write HTML file
 function writeToFile(data) {
     const webpageHTML = generateHTML(data);
-    fs.writeFile('employees.html', webpageHTML, (err) =>
+    fs.writeFile('./dist/employees.html', webpageHTML, (err) =>
         err ? console.log(err) : 
         console.log('Success!')
     );
 }
 
-// TODO: Define function to append HTML file
+// Define function to append HTML file
 function appendToFile(data) {
-    const webpageHTML = `           <div class='col-4'>
-                <div class="card" style="width: 18rem;">
-                    <div class="card-body">
-                        <h5 class="card-title">${data.name}</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">${data.getRole()}</h6>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">ID: ${data.id}</li>
-                            <li class="list-group-item">email: ${data.email}</li>
-                            <li class="list-group-item">${data.github}${data.school}</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-`
-    fs.appendFile('employees.html', webpageHTML, (err) =>
+    const webpageHTML = appendHTML(data);
+    fs.appendFile('./dist/employees.html', webpageHTML, (err) =>
     err ? console.log(err) : 
     console.log('Success!'));
 }
 
+// Define function to dynamically add the quantity of employees the user enters
 function addEmployeeFunction() {
     inquirer.prompt(addEmployeeQ)
     .then((data) => {
@@ -137,13 +126,8 @@ function addEmployeeFunction() {
                 addEmployeeFunction();
             })
         } else {
-            const endHTML = `           </div>
-        </div>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js" integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SY2XofN4zfuZxLkoj1gXtW8ANNCe9d5Y3eG5eD" crossorigin="anonymous"></script>
-</body>
-</html>`
-            fs.appendFile('employees.html', endHTML,(err) =>
+            const endHTML = appendHTML('end');
+            fs.appendFile('./dist/employees.html', endHTML, (err) =>
             err ? console.log(err) : 
             console.log('Success!'));
         }
