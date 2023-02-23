@@ -51,7 +51,7 @@ const engineerQs = [
     },
     {
         type: 'input',
-        message: 'GitHub profile link:',
+        message: 'GitHub username:',
         name: 'github'
     }
 ];
